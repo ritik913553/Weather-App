@@ -2,25 +2,24 @@ import React, { useState } from "react";
 import {useNavigate,Link} from 'react-router-dom'
 import axios from 'axios'
 import toast, { Toaster } from "react-hot-toast";
+import {useAuth} from '../context/AuthContext.jsx'
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); // Hook to navigate to another page
 
+  const {login}=useAuth()
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    console.log("Email:", email);
-    console.log("Password:", password);
-    try {
-      await axios.post('/api/v1/user/login',{email,password})
-    } catch (error) {
-      if(error.status == 401){
-        toast.error("Invalid credentials", { duration: 2000 });
-      }
-      console.log("Error During Login:",error)
+    if(!email ||!password){
+      alert('All fields are required');
+      return;
     }
+    await login({email,password})
+   
   };
 
 

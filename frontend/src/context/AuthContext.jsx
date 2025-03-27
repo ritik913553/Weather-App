@@ -16,8 +16,7 @@ export const AuthProvider = ({ children }) => {
         const res = await axios.get("/api/v1/user/profile", {
           withCredentials: true,
         });
-        console.log(res)
-        setUser(res.data.data.loggedInUser);
+        setUser(res.data.data);
         setIsAuthenticated(true);
       } catch (error) {
         setUser(null);
@@ -40,15 +39,13 @@ export const AuthProvider = ({ children }) => {
           withCredentials: true, // Ensures cookie storage
         }
       );
-      console.console.log(res);
-      setUser(res.data.data.loggedInUser);
+      console.log(res);
+      setUser(res.data.data.user);
       setIsAuthenticated(true);
+      navigate('/')
       toast.success("Logged in successfully!");
       return true;
     } catch (error) {
-      if (error.status == 405) {
-        toast.error("Please Verify your email!");
-      }
       console.error("Login failed", error);
       return false;
     }
@@ -59,27 +56,41 @@ export const AuthProvider = ({ children }) => {
   // 🔹 Logout function
   const logout = async () => {
     try {
-      await axios.post(
+      await axios.get(
         "/api/v1/user/logout",
         {},
         { withCredentials: true }
       );
       setUser(null);
       setIsAuthenticated(false);
+      console.log("Logged out");
       toast.success("Logged out successfully!");
     } catch (error) {
       console.error("Logout failed", error);
     }
   };
 
+  // Search history
+  const getSearchHistory = async () => {
+    try {
+      const res = await axios.get("/api/v1/weather/search-history", {
+        withCredentials: true,
+      });
+      return res.data.data;
+    } catch (error) {
+      console.error("Failed to fetch search history", error);
+      return [];
+    }
+  };
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, loading }}
+      value={{ user, isAuthenticated, login, logout, loading ,getSearchHistory}}
     >
       {children}
     </AuthContext.Provider>
   );
 };
 
+export default AuthProvider;
 // Custom hook to use auth state
 export const useAuth = () => useContext(AuthContext);

@@ -45,6 +45,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please provide email and password");
   }
   const user = await User.findOne({ email });
+  
   if (!user || !(await user.comparePassword(password))) {
     throw new ApiError(401, "Invalid Credentials");
   }
@@ -52,8 +53,7 @@ const loginUser = asyncHandler(async (req, res) => {
     user._id
   );
 
-  const loggedInUser = User.findById(user._id).select("-password");
-
+  const loggedInUser = await User.findById(user._id).select("-password");
   const options = {
     httpOnly: true,
     secure: true,

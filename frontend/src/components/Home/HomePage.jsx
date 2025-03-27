@@ -7,9 +7,10 @@ import TenDayoercast from "./TenDayoercast";
 import CurrentCOnditions from "./CurrentCOnditions";
 import { useWeather } from "../../context/weatherContext";
 import SkeletonLoader from "../SkeletonLoader";
-
+import ProfilePage from "../ProfilePage.jsx";
 const HomePage = () => {
   const { loading, weather } = useWeather();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [bgColor, setBgColor] = useState({
     mainBg: "",
     secondaryBg: "",
@@ -65,11 +66,13 @@ const HomePage = () => {
     const description = weather?.weather[0]?.main.toLowerCase();
     setBgColor(getBgColors(description));
   }, [weather]);
-  return (
+  return isProfileOpen ? (
+    <ProfilePage bgColor={bgColor} setIsProfileOpen={setIsProfileOpen} />
+  ) : (
     <div
-      className={`pt-3  ${bgColor.mainBg}  h-auto w-full pb-10 ${bgColor.textColor}`}
+      className={`pt-3  ${bgColor.mainBg}  h-auto w-full pb-10 relative  ${bgColor.textColor}`}
     >
-      <Search bgColor={bgColor} />
+      <Search bgColor={bgColor} setIsProfileOpen={setIsProfileOpen} />
       {loading ? (
         <SkeletonLoader />
       ) : (

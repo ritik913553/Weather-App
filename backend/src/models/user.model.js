@@ -24,7 +24,13 @@ const userSchema = new mongoose.Schema({
   },
   refreshToken:{
     type: String,
-  }
+  },
+  searchHistory: [
+    {
+      city: String,
+      searchDate: { type: Date, default: Date.now },
+    },
+  ]
 }, {
   timestamps: true, 
 });

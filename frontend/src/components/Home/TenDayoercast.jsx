@@ -4,7 +4,6 @@ import { useWeather } from "../../context/weatherContext";
 
 const TenDayoercast = ({bgColor}) => {
   const { foercast,loading } = useWeather();
-  console.log(foercast);
   
   return (
     <div className="mt-5 px-4">

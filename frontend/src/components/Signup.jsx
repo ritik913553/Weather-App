@@ -1,22 +1,32 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const handleSubmit = (e) => {
+  const navigate = useNavigate("");
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
+    if(!email || !password || !name){
+      alert('All fields are required');
       return;
     }
-    // handle signup logic here
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Password:", password);
+    try {
+      const res = await axios.post("/api/v1/user/register", {
+        name,
+        email,
+        password,
+      });
+      console.log(res)
+      toast.success("Account created Successfully !")
+      navigate('/login')
+    } catch (error) {
+      console.log(error);
+      toast.error("Error creating account")
+    }
   };
 
   return (
@@ -79,32 +89,12 @@ const Signup = () => {
               id="password"
               name="password"
               value={password}
+              minLength="6"
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="off"
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none  outline-none"
               placeholder="Enter your password"
-            />
-          </div>
-
-          {/* Confirm Password field */}
-          <div>
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              autoComplete="off"
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none  outline-none"
-              placeholder="Confirm your password"
             />
           </div>
 

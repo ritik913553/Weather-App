@@ -94,6 +94,7 @@ const WeatherProvider = ({ children }) => {
   const [location, setLocation] = useState(null);
   const [country, setCountry] = useState(null);
   const [foercast,setFoercast] = useState(null);
+  const [user,setUser] = useState(null);
   useEffect(() => {
     const getWeatherData = async () => {
       if (!navigator.geolocation) {
@@ -149,7 +150,7 @@ const WeatherProvider = ({ children }) => {
   const fetchWeatherByCity = async (city) => {
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:8000/api/v1/weather/city', { city });
+      const res = await axios.post('http://localhost:8000/api/v1/weather/city', { city, userId: user?._id });
       setWeather(res.data.data.current);
       setFoercast(res.data.data.foercast);
       setCountry(getCountryName(res.data.data.current.sys.country));
@@ -179,6 +180,8 @@ const WeatherProvider = ({ children }) => {
         setLocation,
         country,
         foercast,
+        user,
+        setUser
       }}
     >
       {children}
