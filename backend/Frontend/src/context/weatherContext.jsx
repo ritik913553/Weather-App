@@ -133,7 +133,7 @@ const WeatherProvider = ({ children }) => {
         setFoercast(JSON.parse(localStorage.getItem('foercast')));
         return
       }
-      const res = await axios.post('http://localhost:8000/api/v1/weather/location', { lat, lon });
+      const res = await axios.post('/api/v1/weather/location', { lat, lon });
       setWeather(res.data.data.current);
       setFoercast(res.data.data.foercast);
       setCity(res.data.data.current.name);
@@ -150,7 +150,7 @@ const WeatherProvider = ({ children }) => {
   const fetchWeatherByCity = async (city) => {
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:8000/api/v1/weather/city', { city, userId: user?._id });
+      const res = await axios.post('/api/v1/weather/city', { city, userId: user?._id });
       setWeather(res.data.data.current);
       setFoercast(res.data.data.foercast);
       setCountry(getCountryName(res.data.data.current.sys.country));
